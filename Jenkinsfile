@@ -4,7 +4,6 @@ pipeline {
     environment {
         IMAGE_NAME = "django-python-app"
         CONTAINER_NAME = "django-container"
-        PORT = "8000"
     }
 
     stages {
@@ -12,13 +11,6 @@ pipeline {
         stage('Clean Workspace') {
             steps {
                 deleteDir()
-            }
-        }
-
-        stage('Clone Repository') {
-            steps {
-                git branch: 'main',
-                url: 'https://github.com/sreenadhcs/python-django.git'
             }
         }
 
@@ -33,17 +25,13 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-                docker build -t $IMAGE_NAME .
-                '''
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
 
         stage('Stop Existing Container') {
             steps {
-                sh '''
-                docker rm -f $CONTAINER_NAME || true
-                '''
+                sh 'docker rm -f $CONTAINER_NAME || true'
             }
         }
 
@@ -60,12 +48,9 @@ pipeline {
 
         stage('Check Running Container') {
             steps {
-                sh '''
-                docker ps
-                '''
+                sh 'docker ps'
             }
         }
-
     }
 
     post {
